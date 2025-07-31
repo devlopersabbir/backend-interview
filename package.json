@@ -8,6 +8,8 @@
   },
   "dependencies": {
     "argon2": "^0.43.1",
+    "body-parser": "^2.2.0",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
@@ -18,8 +20,11 @@
     "zod": "^4.0.14"
   },
   "devDependencies": {
+    "@types/body-parser": "^1.19.6",
+    "@types/cookie-parser": "^1.4.9",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
+    "@types/express-serve-static-core": "^5.0.7",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.1.0",
     "dotenv": "^17.2.1",

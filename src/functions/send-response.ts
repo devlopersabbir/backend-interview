@@ -3,15 +3,14 @@ import env from "@/app/env";
 import { AuthService } from "@/modules/auth/auth.service";
 import { Response } from "express";
 
-export const sendResponseWithJwt = <U>(
+export const sendResponseWithJwt = (
   res: Response,
   payload: JwtUserPayload,
-  user: U,
   message: string
 ) => {
   const accessToken = AuthService.generateAccessToken(payload);
 
-  res.cookie(env.REFRESH_TOKEN_COOKIE_NAME, accessToken, {
+  res.cookie(env.ACCESS_TOKEN_COOKIE_NAME, accessToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production", // Use HTTPS in production
     sameSite: "strict", // Prevent CSRF
@@ -22,7 +21,6 @@ export const sendResponseWithJwt = <U>(
     statusCode: 200,
     message,
     accessToken,
-    user,
   });
 };
 export const sendResponseWithClearCookie = (

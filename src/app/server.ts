@@ -2,21 +2,18 @@ import express from "express";
 import cors from "cors";
 import { corsOptions } from "@/configs";
 import { authRouter } from "@/modules/auth/auth.routes";
-
-// @ts-ignore
-declare module "express-serve-static-core" {
-  interface Request {
-    user?: any;
-    validatedData?: any;
-  }
-}
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
+import { notesRouter } from "@/modules/notes/notes.routes";
 
 const app = express();
 app.use(cors(corsOptions));
-app.use(express.json());
+app.use(cookieParser());
+app.use(express.json({ limit: "500000kb" }));
+app.use(bodyParser.json({ limit: "500000kb" }));
 
 /** Routes */
 app.use("/api", authRouter);
-// app.use("/api/notes", notesRouter);
+app.use("/api", notesRouter);
 
 export { app };

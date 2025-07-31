@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { userSchema } from "./user.dto";
-import { getZodError } from "@/utils/zod.utils";
-import { sendResponseWithJwt } from "@/functions/send-response";
+import { getZodError } from "@/utils/error.utils";
+import { send_response, sendResponseWithJwt } from "@/functions/send-response";
 import { AuthService } from "./auth.service";
 import { JwtUserPayload } from "@/@types";
 import { inject, injectable } from "tsyringe";
@@ -11,6 +11,18 @@ import { authContainer } from "./auth.injection";
 @injectable()
 export class AuthController {
   constructor(private readonly service: AuthService) {}
+
+  async register(req: Request, res: Response) {
+    try {
+      const { success, data, error } = userSchema.safeParse(req.body);
+      if (!success) throw new Error(getZodError(error));
+      await this.service.register(data);
+
+      return send_response(res, 201, "Account created successfully");
+    } catch (err) {
+      return res.status(500).json(err.message);
+    }
+  }
   async login(req: Request, res: Response) {
     try {
       const { success, data, error } = userSchema.safeParse(req.body);
@@ -22,14 +34,12 @@ export class AuthController {
       return sendResponseWithJwt(
         res,
         payload,
-        user,
         `Hello ${user.name}! Login successful`
       );
     } catch (err) {
-      return res.status(500).json(err);
+      return res.status(500).json(err.message);
     }
   }
-  register(req: Request, res: Response) {}
 }
 export const createAuthController = () => {
   const controller = authContainer.resolve(AuthController);

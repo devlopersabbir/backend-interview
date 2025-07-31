@@ -12,8 +12,7 @@ const EnvSchema = z.object({
   ACCESS_TOKEN_SECRET: z.string(),
 
   ACCESS_TOKEN_EXPIRES_IN: z.string(),
-  REFRESH_TOKEN_EXPIRES_IN: z.string(),
-  REFRESH_TOKEN_COOKIE_NAME: z.string().default("refresh_token"),
+  ACCESS_TOKEN_COOKIE_NAME: z.string().default("access_token"),
 });
 
 export type EnvSchema = z.infer<typeof EnvSchema>;

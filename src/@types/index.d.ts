@@ -5,3 +5,9 @@ export type JwtUserPayload = {
   email: string;
 };
 export type RouteConfig = IRouteConfig[];
+
+declare module "express" {
+  interface Request {
+    user?: JwtUserPayload;
+  }
+}

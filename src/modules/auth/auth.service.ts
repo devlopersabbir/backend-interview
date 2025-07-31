@@ -1,4 +1,4 @@
-import { comparePassword } from "@/libs";
+import { comparePassword, hashPassword } from "@/libs";
 import { UserSchema } from "./user.dto";
 import { AuthRepository } from "./auth.repository";
 import { JwtUserPayload } from "@/@types";
@@ -17,6 +17,14 @@ export class AuthService {
       throw new Error("Invalid credentials");
     }
     return user;
+  }
+  async register(input: UserSchema) {
+    // check if user already exist or not
+    const user = await this.repository.findByEmail(input.email);
+    if (user) throw new Error(`(${user.email}) is already exist`);
+
+    const password = await hashPassword(input.password);
+    return await this.repository.store({ ...input, password });
   }
   // Generate access token
   public static generateAccessToken<P extends JwtUserPayload>(
