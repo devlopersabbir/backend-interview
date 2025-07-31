@@ -7,8 +7,8 @@ A simple RESTful API for managing user notes with authentication.
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/devlopersabbir/backend-interview.git
-   cd backend-interview
+   git clone https://github.com/devlopersabbir/task-server.git
+   cd task-server
    ```
 
 2. **Install dependencies**
@@ -53,7 +53,8 @@ docker-compose up
 docker compose up
 ```
 
-The API will be available at `http://localhost:5000`
+The API will be available at `http://localhost:5000` **(Locally)**
+And this is the live link [https://task-server-bc62.onrender.com](https://task-server-bc62.onrender.com)
 
 ## API Endpoints
 
