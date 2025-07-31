@@ -1,7 +1,6 @@
 import { injectable } from "tsyringe";
 import { NoteSchema } from "./notes.dto";
 import { notesModel } from "./notes.model";
-import { UserSchema } from "../auth/user.dto";
 
 @injectable()
 export class NotesRepository {
@@ -21,6 +20,14 @@ export class NotesRepository {
   }
   async readById(id: string) {
     return await notesModel.findById(id);
+  }
+  async readOwnById({ noteId, userId }: { noteId: string; userId: string }) {
+    const note = await notesModel.findOne({
+      user: userId,
+    });
+    if (String(note._id) !== noteId)
+      throw new Error("You can get only your single note.");
+    return note;
   }
   async readByUserId(userId: string) {
     return await notesModel.findOne({

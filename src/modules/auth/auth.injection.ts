@@ -1,6 +1,6 @@
 import { container } from "tsyringe";
-import { AuthService } from "./auth.service";
 import { AuthController } from "./auth.controller";
+import { AuthService } from "./auth.service";
 import { AuthRepository } from "./auth.repository";
 
 container.register(AuthRepository, { useClass: AuthRepository });

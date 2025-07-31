@@ -1,11 +1,10 @@
-import { Request, Response } from "express";
+import { injectable } from "tsyringe";
+import type { Request, Response } from "express";
 import { userSchema } from "./user.dto";
 import { getZodError } from "@/utils/error.utils";
 import { send_response, sendResponseWithJwt } from "@/functions/send-response";
 import { AuthService } from "./auth.service";
 import { JwtUserPayload } from "@/@types";
-import { inject, injectable } from "tsyringe";
-import { AuthRepository } from "./auth.repository";
 import { authContainer } from "./auth.injection";
 
 @injectable()
@@ -20,7 +19,7 @@ export class AuthController {
 
       return send_response(res, 201, "Account created successfully");
     } catch (err) {
-      return res.status(500).json(err.message);
+      return res.status(500).json({ message: err.message });
     }
   }
   async login(req: Request, res: Response) {
@@ -37,7 +36,7 @@ export class AuthController {
         `Hello ${user.name}! Login successful`
       );
     } catch (err) {
-      return res.status(500).json(err.message);
+      return res.status(500).json({ message: err.message });
     }
   }
 }

@@ -15,11 +15,11 @@ export class NotesController {
     try {
       const { success, data, error } = noteSchema.safeParse(req.body);
       if (!success) throw new Error(getZodError(error));
-      await this.service.store(data, user);
+      const note = await this.service.store(data, user);
 
-      return send_response(res, 201, "Notes created successfully");
+      return send_response(res, 201, "Notes created successfully", note);
     } catch (err) {
-      return res.status(500).json(err.message);
+      return res.status(500).json({ message: err.message });
     }
   }
   async index(_: Request, res: Response) {
@@ -34,7 +34,10 @@ export class NotesController {
   async update(req: Request, res: Response) {
     const { id } = req.params;
     const user = req.user;
-    if (!id) return send_response(res, 404, "Request note id is required!");
+    if (!id)
+      return send_response(res, 404, "Note id not found!", {
+        message: "Request note id is required!",
+      });
 
     try {
       const note = await this.service.update(id, {
@@ -60,6 +63,20 @@ export class NotesController {
       return res.status(500).json(err.message);
     }
   }
+  async findOwnOne(req: Request, res: Response) {
+    const { id } = req.params;
+    const user = req.user;
+    if (!id) return send_response(res, 404, "Request note id is required!");
+
+    try {
+      const note = await this.service.findOwnOne(id, user.id);
+      if (!note) return send_response(res, 404, "No notes found with that ID");
+
+      return send_response(res, note);
+    } catch (err) {
+      return res.status(500).json(err.message);
+    }
+  }
   async delete(req: Request, res: Response) {
     const { id } = req.params;
     const user = req.user;
@@ -68,7 +85,7 @@ export class NotesController {
     try {
       await this.service.delete(id, user.id);
 
-      return send_response(res, 200, "Note deleted successfully");
+      return send_response(res, { message: "Note deleted successfully" });
     } catch (err) {
       return res.status(500).json(err.message);
     }
@@ -81,6 +98,7 @@ export const createNotesController = () => {
     store: controller.store.bind(controller),
     index: controller.index.bind(controller),
     update: controller.update.bind(controller),
+    findOwnOne: controller.findOwnOne.bind(controller),
     findOne: controller.findOne.bind(controller),
     delete: controller.delete.bind(controller),
   };

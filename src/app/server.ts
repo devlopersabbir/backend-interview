@@ -9,8 +9,8 @@ import { notesRouter } from "@/modules/notes/notes.routes";
 const app = express();
 app.use(cors(corsOptions));
 app.use(cookieParser());
-app.use(express.json({ limit: "500000kb" }));
-app.use(bodyParser.json({ limit: "500000kb" }));
+app.use(express.json());
+app.use(bodyParser.json());
 
 /** Routes */
 app.use("/api", authRouter);

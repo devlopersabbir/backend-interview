@@ -42,6 +42,9 @@ export class NoteService {
   async findOne(id: string) {
     return await this.repository.readById(id);
   }
+  async findOwnOne(noteId: string, userId: string) {
+    return await this.repository.readOwnById({ noteId, userId });
+  }
   async delete(id: string, userId: string) {
     const note = await this.repository.readById(id);
     if (!note) throw new Error("Note not found with that ID");
