@@ -11,10 +11,11 @@ export class NotesController {
   constructor(private readonly service: NoteService) {}
 
   async store(req: Request, res: Response) {
+    const user = req.user;
     try {
       const { success, data, error } = noteSchema.safeParse(req.body);
       if (!success) throw new Error(getZodError(error));
-      await this.service.store(data);
+      await this.service.store(data, user);
 
       return send_response(res, 201, "Notes created successfully");
     } catch (err) {
@@ -32,10 +33,14 @@ export class NotesController {
   }
   async update(req: Request, res: Response) {
     const { id } = req.params;
+    const user = req.user;
     if (!id) return send_response(res, 404, "Request note id is required!");
 
     try {
-      const note = await this.service.update(id, req.body);
+      const note = await this.service.update(id, {
+        ...req.body,
+        user: user.id,
+      });
 
       return send_response(res, 200, "Note update successfully", note);
     } catch (err) {
@@ -57,10 +62,11 @@ export class NotesController {
   }
   async delete(req: Request, res: Response) {
     const { id } = req.params;
+    const user = req.user;
     if (!id) return send_response(res, 404, "Request note id is required!");
 
     try {
-      await this.service.delete(id);
+      await this.service.delete(id, user.id);
 
       return send_response(res, 200, "Note deleted successfully");
     } catch (err) {
