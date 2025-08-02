@@ -2,6 +2,8 @@
 
 A simple RESTful API for managing user notes with authentication.
 
+**[Live Postman documentation](https://documenter.getpostman.com/view/20290900/2sB3BAKXSr)**
+
 ## Installation & Setup
 
 1. **Clone the repository**
